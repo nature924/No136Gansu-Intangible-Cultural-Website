@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ShenqingDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.yh_types as yhTypes
+        ,a.shenqing_time as shenqingTime
+        ,a.sf_types as sfTypes
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ShenqingView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Shenqing  a
+        <where>
+            <if test=" params.shenqingTimeStart != '' and params.shenqingTimeStart != null and params.shenqingTimeStart != 'null' ">
+                and a.shenqing_time &gt;= {params.shenqingTimeStart}
+            </if>
+            <if test=" params.shenqingTimeEnd != '' and params.shenqingTimeEnd != null and params.shenqingTimeEnd != 'null' ">
+                and a.shenqing_time &lt;= {params.shenqingTimeEnd}
+            </if>
+            <if test=" params.sfTypes != '' and params.sfTypes != null and params.sfTypes != 'null' ">
+                and a.sf_types = #{params.sfTypes}
+            </if>
+            <if test=" params.yhTypes != '' and params.yhTypes != null">
+                and a.yh_types = #{params.yhTypes}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>
